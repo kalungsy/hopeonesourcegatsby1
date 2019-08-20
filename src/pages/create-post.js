@@ -18,6 +18,7 @@ const { Option } = Select;
 const CreatePost = (props) => {
 	let [ messageCharCount, setMessageCharCount ] = useState(0);
 	let [ serviceRecurring, setServiceRecurring ] = useState(false);
+	let [ serviceRecurringEvery, setServiceRecurringEvery ] = useState('every week');
 	let [ messageSendTime, setMessageSendTime ] = useState(1);
 
 	const dateFormat = 'MM/DD/YYYY';
@@ -52,8 +53,8 @@ const CreatePost = (props) => {
 		'Veterans',
 		'Victims of Crime / Demoestic Violence'
 	];
-    const repeatsDaysOptions = [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ];
-    const repeatsDaysOptionsShort = [ 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun' ];
+	const repeatsDaysOptions = [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ];
+	const repeatsDaysOptionsShort = [ 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun' ];
 	const housingStatusOptions = [ 'At-risk', 'Currently Homeless', 'Stable Housing' ];
 
 	return (
@@ -136,12 +137,54 @@ const CreatePost = (props) => {
 							<Col xs={24}>
 								<h4 style={{ marginBottom: '15px' }}>
 									Service repeats{' '}
-									<Select size="large" defaultValue="every week" style={{ width: '220px' }}>
-										<Option value="every week">Every week on</Option>
-                                        <Option value="every other">Every other week on</Option>
-                                        <Option value="every month">Every month's</Option>
-                                        <Option value="every year">Every year's</Option>
+									<Select
+										size="large"
+										value={serviceRecurringEvery}
+										style={{ width: '220px', marginLeft: '8px', marginRight: '8px' }}
+										onChange={(value) => {
+											setServiceRecurringEvery(value);
+										}}
+									>
+										<Option value="every week">Every</Option>
+										<Option value="every other">Every other</Option>
+										<Option value="every month">Every month's</Option>
+										<Option value="every year">Every year's</Option>
 									</Select>
+									{serviceRecurringEvery == 'every year' && (
+										<Select
+											mode="multiple"
+											size="large"
+											defaultValue={[1]}
+											style={{ minWidth: '150px', width: 'auto', marginRight: '8px' }}
+										>
+											<Option value={1}>January</Option>
+											<Option value={2}>Febuary</Option>
+											<Option value={3}>March</Option>
+											<Option value={4}>April</Option>
+											<Option value={5}>May</Option>
+											<Option value={6}>June</Option>
+											<Option value={7}>July</Option>
+											<Option value={8}>August</Option>
+											<Option value={9}>September</Option>
+											<Option value={10}>October</Option>
+											<Option value={11}>November</Option>
+											<Option value={12}>December</Option>
+										</Select>
+									)}
+									{(serviceRecurringEvery == 'every month' || serviceRecurringEvery == 'every year') && (
+										<Select
+											mode="multiple"
+											size="large"
+											defaultValue={[1]}
+											style={{ minWidth: '150px', width: 'auto', marginRight: '8px' }}
+										>
+											<Option value={1}>First</Option>
+											<Option value={2}>Second</Option>
+											<Option value={3}>Third</Option>
+											<Option value={4}>Last</Option>
+										</Select>
+									)}
+									week on ...
 								</h4>
 								<CheckboxGroup
 									className={`__flex __col-4 __col-7`}

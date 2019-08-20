@@ -1,0 +1,125 @@
+.ant-row {
+	padding: 15px 0;
+}
+.ant-card {
+	box-shadow: 0 7px 14px 0 rgba(60, 66, 87, 0.1), 0 3px 6px 0 rgba(0, 0, 0, .07);
+
+	h3.__card-title {
+		margin-bottom: 40px;
+		font-weight: 700;
+
+		.anticon {
+			margin-right: 12px;
+		}
+	}
+}
+
+.char-counter {
+	margin: 8px 0 8px 0;
+	text-align: right;
+
+	&.__full {
+		color: #ef2929;
+		font-weight: bold;
+	}
+}
+
+.ant-calendar-picker {
+	margin-right: 15px;
+    display: block;
+
+    @media only screen and (min-device-width: 375px) and (max-device-width: 667px) {     
+        width: 100%;
+    }
+    
+	.ant-calendar-picker-input {
+        
+		&.ant-input {
+			padding: 20px 19px;
+			height: 60px;
+			min-width: 270px;
+			width: 30%;
+			max-width: 100%;
+			font-size: 1.2em;
+            font-weight: 700;
+            
+            @media only screen and (min-device-width: 375px) and (max-device-width: 667px) {
+                margin-bottom: 15px;
+                width: 100%;
+            }
+		}
+	}
+}
+.ant-calendar-picker,
+.ant-calendar,
+.ant-calendar-date {
+	font-size: 14px; //This must be 14px, otherwise it will messup the UI
+}
+.ant-checkbox-group,
+.ant-radio-group {
+	&.__flex {
+		display: flex;
+		flex-wrap: wrap;
+		margin: 0 -10px;
+
+		&.__space-between {
+			justify-content: space-between;
+		}
+
+		label {
+			font-weight: 500;
+			font-size: 1.2em;
+
+			&.ant-checkbox-wrapper-checked,
+			&.ant-radio-wrapper-checked {
+				font-weight: 700;
+			}
+
+			.ant-checkbox,
+			.ant-radio {
+				margin-right: 4px;
+			}
+		}
+
+		label.ant-checkbox-group-item,
+		label.ant-radio-wrapper {
+			width: 30%;
+			min-height: 60px;
+			display: flex;
+			justify-content: left;
+			align-items: center;
+
+			@media only screen and (min-device-width: 375px) and (max-device-width: 667px) {
+				width: 100%;
+			}
+		}
+
+		&.__col-4 {
+			label.ant-checkbox-group-item,
+			label.ant-radio-wrapper {
+				width: calc(100% / 5);
+			}
+		}
+
+		&.__hide-checkbox {
+			.ant-checkbox {
+				display: none;
+			}
+		}
+	}
+
+	label.ant-checkbox-group-item,
+	label.ant-radio-wrapper {
+		margin-left: 0;
+		padding: 8px 12px;
+		border-radius: 4px;
+		border: 1px solid #1890ff47;
+		margin: 10px;
+	}
+
+	label.ant-checkbox-wrapper-checked,
+	label.ant-radio-wrapper-checked {
+		background: #1890ff;
+		color: white;
+	}
+}

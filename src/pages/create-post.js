@@ -14,12 +14,13 @@ const settings = {
 const CheckboxGroup = Checkbox.Group;
 const TextArea = Input.TextArea;
 const { Option } = Select;
+
 const CreatePost = (props) => {
 	let [ messageCharCount, setMessageCharCount ] = useState(0);
 	let [ serviceRecurring, setServiceRecurring ] = useState(false);
 	let [ messageSendTime, setMessageSendTime ] = useState(1);
 
-	const plainOptions = [ 'Apple', 'Pear', 'Orange' ];
+    const dateFormat = 'MM/DD/YYYY';
 	const categoriesOptions = [
 		'Child Care',
 		'Clothing / Haircuts',
@@ -100,6 +101,7 @@ const CreatePost = (props) => {
 							{!serviceRecurring && <h4>Service date</h4>}
 							{serviceRecurring && <h4>Service starts on</h4>}
 							<DatePicker
+                                format={dateFormat}
 								onChange={(date, dateString) => {
 									console.log('service date', date, dateString);
 								}}
@@ -108,6 +110,7 @@ const CreatePost = (props) => {
 						<Col xs={24} md={8}>
 							<h4>Start time</h4>
 							<DatePicker
+                                format={dateFormat}
 								onChange={(date, dateString) => {
 									console.log('service date', date, dateString);
 								}}
@@ -116,6 +119,7 @@ const CreatePost = (props) => {
 						<Col xs={24} md={8}>
 							<h4>End time</h4>
 							<DatePicker
+                                format={dateFormat}
 								onChange={(date, dateString) => {
 									console.log('service date', date, dateString);
 								}}

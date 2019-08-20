@@ -52,7 +52,8 @@ const CreatePost = (props) => {
 		'Veterans',
 		'Victims of Crime / Demoestic Violence'
 	];
-	const repeatsDaysOptions = [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ];
+    const repeatsDaysOptions = [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ];
+    const repeatsDaysOptionsShort = [ 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun' ];
 	const housingStatusOptions = [ 'At-risk', 'Currently Homeless', 'Stable Housing' ];
 
 	return (
@@ -135,16 +136,16 @@ const CreatePost = (props) => {
 							<Col xs={24}>
 								<h4 style={{ marginBottom: '15px' }}>
 									Service repeats{' '}
-									<Select size="large" style={{ width: '220px' }}>
-										<Option value="every">Every</Option>
-										<Option value="every first">Every First</Option>
-										<Option value="every last">Every Last</Option>
-										<Option value="every other">Every Other</Option>
+									<Select size="large" defaultValue="every week" style={{ width: '220px' }}>
+										<Option value="every week">Every week on</Option>
+                                        <Option value="every other">Every other week on</Option>
+                                        <Option value="every month">Every month's</Option>
+                                        <Option value="every year">Every year's</Option>
 									</Select>
 								</h4>
 								<CheckboxGroup
-									className={`__flex __col-4`}
-									options={repeatsDaysOptions}
+									className={`__flex __col-4 __col-7`}
+									options={repeatsDaysOptionsShort}
 									onChange={(values) => {
 										console.log('current values', values);
 									}}

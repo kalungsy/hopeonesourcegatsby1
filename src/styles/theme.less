@@ -106,6 +106,16 @@
 			label.ant-radio-wrapper {
 				width: calc(100% / 5);
 			}
+        }
+        &.__col-7 {
+			label.ant-checkbox-group-item,
+			label.ant-radio-wrapper {
+                width: calc(100% / 9);
+                
+                @media only screen and (min-device-width: 375px) and (max-device-width: 667px) {
+                    width: calc(100% / 3);
+                }
+			}
 		}
 
 		&.__hide-checkbox {

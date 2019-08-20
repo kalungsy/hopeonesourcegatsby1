@@ -347,13 +347,13 @@ const CreatePost = (props) => {
 						<h3 className="__card-title">
 							<Icon type="carry-out" /> Ready?
 						</h3>
-						<h4>Ready to start your service?</h4>
+						<h4>Ready to post your service?</h4>
 						<p>
 							Please double check and make sure all information entered above are correct before
-							proceeding to start.
+							proceeding to post.
 						</p>
 						<Button icon="check-circle" size="large" type="primary" style={{ marginRight: '15px' }}>
-							Start this service now
+							Post this service now
 						</Button>
 						<Button icon="save" size="large">
 							Save and preview

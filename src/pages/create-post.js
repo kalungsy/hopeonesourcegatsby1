@@ -199,8 +199,9 @@ const CreatePost = (props) => {
 					{serviceRecurring && (
 						<Row>
 							<Col xs={24} md={8}>
-								<h4>Service stops on</h4>
+								<h4>Service's last day is on</h4>
 								<DatePicker
+									format={dateFormat}
 									onChange={(date, dateString) => {
 										console.log('service date', date, dateString);
 									}}

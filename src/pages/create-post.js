@@ -103,6 +103,7 @@ const CreatePost = (props) => {
 							{!serviceRecurring && <h4>Service date</h4>}
 							{serviceRecurring && <h4>Service starts on</h4>}
 							<DatePicker
+								readonly="true"
 								format={dateFormat}
 								onChange={(date, dateString) => {
 									console.log('service date', date, dateString);
@@ -112,6 +113,7 @@ const CreatePost = (props) => {
 						<Col xs={24} md={8}>
 							<h4>Start time</h4>
 							<TimePicker
+								readonly="true"
 								use12Hours
 								format="h:mm a"
 								onChange={(time, timeString) => {
@@ -123,6 +125,7 @@ const CreatePost = (props) => {
 						<Col xs={24} md={8}>
 							<h4>End time</h4>
 							<TimePicker
+								readonly="true"
 								use12Hours
 								format="h:mm a"
 								onChange={(time, timeString) => {

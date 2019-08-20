@@ -31,7 +31,7 @@ const getWebLocation = () => {
 const Map = (props) => {
     const { setCoordinates } = props;
     
-    let mapHeight = '300px';
+    let mapHeight = '450px';
 
 	let [ viewport, setViewport ] = useState({
 		width: '100%',
@@ -76,9 +76,20 @@ const Map = (props) => {
 				}
 			}}
 		>
-			<Marker latitude={viewport.latitude} longitude={viewport.longitude} offsetLeft={-20} offsetTop={-10}>
+			<Marker draggable latitude={viewport.latitude} longitude={viewport.longitude} offsetLeft={-20} offsetTop={-10} 
+				// onDragEnd={(e)=>{
+				// 	e.preventDefault();
+				// 	console.log('drag ended', e)
+				// 	setViewport({
+				// 		...viewport,
+				// 		latitude: e.lngLat[0],
+				// 		longitude: e.lngLat[1]
+				// 	})
+				// }}
+				>
                 <Icon type="environment" style={{fontSize: '2.5em', color: 'red'}} theme="filled"/>
 			</Marker>
+			{/* <span>{`Lat: ${viewport.latitude}, Long: ${viewport.longitude}`}</span> */}
 		</ReactMapGL>
 	);
 };

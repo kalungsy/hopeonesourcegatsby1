@@ -33,13 +33,13 @@ module.exports = {
         icon: `src/images/gatsby-icon.png`, // This path is relative to the root of the site.
       },
     },
-    {
-      resolve: `gatsby-source-drupal`,
-      options: {
-        baseUrl: `http://dev1.docksal/`,
-        apiBase: `jsonapi`, // optional, defaults to `jsonapi`
-      },
-    },
+    // {
+    //   resolve: `gatsby-source-drupal`,
+    //   options: {
+    //     baseUrl: `http://dev1.docksal/`,
+    //     apiBase: `jsonapi`, // optional, defaults to `jsonapi`
+    //   },
+    // },
     {
       resolve: 'gatsby-plugin-antd',
       options: {

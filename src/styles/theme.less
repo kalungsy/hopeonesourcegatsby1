@@ -24,32 +24,39 @@
 	}
 }
 
-.ant-calendar-picker {
+.ant-calendar-picker,
+.ant-time-picker {
 	margin-right: 15px;
     display: block;
+    min-width: 270px;
+    width: 30%;
+    max-width: 100%;
 
-    @media only screen and (min-device-width: 375px) and (max-device-width: 667px) {     
-        width: 100%;
-    }
-    
-	.ant-calendar-picker-input {
-        
-		&.ant-input {
-			padding: 20px 19px;
-			height: 60px;
-			min-width: 270px;
-			width: 30%;
-			max-width: 100%;
-			font-size: 1.2em;
-            font-weight: 700;
-            
-            @media only screen and (min-device-width: 375px) and (max-device-width: 667px) {
-                margin-bottom: 15px;
-                width: 100%;
-            }
+	@media only screen and (min-device-width: 375px) and (max-device-width: 667px) {
+		width: 100%;
+	}
+
+	.ant-calendar-picker-input,
+	.ant-time-picker-input {
+		padding: 20px 19px;
+		height: 60px;
+		width: 100%;
+		font-size: 1.2em;
+		font-weight: 700;
+
+		@media only screen and (min-device-width: 375px) and (max-device-width: 667px) {
+			margin-bottom: 15px;
+			width: 100%;
 		}
 	}
 }
+
+.ant-time-picker-panel-input,
+.ant-calendar-input-wrap{
+    padding: 20px 19px;
+    height: 47px;
+}
+
 .ant-calendar-picker,
 .ant-calendar,
 .ant-calendar-date {

@@ -4,7 +4,7 @@ import { useStaticQuery, graphql } from 'gatsby';
 import Layout from '../components/layout';
 import Image from '../components/image';
 import SEO from '../components/seo';
-import { Select, Checkbox, DatePicker, Input, Radio, Button, Card, Row, Col, Icon } from 'antd';
+import { Select, Checkbox, DatePicker, TimePicker, Input, Radio, Button, Card, Row, Col, Icon } from 'antd';
 import DateRange from '../components/form-components/date-picker';
 import Map from '../components/form-components/map';
 
@@ -20,7 +20,7 @@ const CreatePost = (props) => {
 	let [ serviceRecurring, setServiceRecurring ] = useState(false);
 	let [ messageSendTime, setMessageSendTime ] = useState(1);
 
-    const dateFormat = 'MM/DD/YYYY';
+	const dateFormat = 'MM/DD/YYYY';
 	const categoriesOptions = [
 		'Child Care',
 		'Clothing / Haircuts',
@@ -77,11 +77,11 @@ const CreatePost = (props) => {
 						When is your service available? Select the dates clients can access your service within a 3
 						month period.
 					</p>
-                    <Row>
-                        <h4>What is your service?</h4>
-                        <p>Enter a short sentence about what you are providing for this service.</p>
-                        <Input size="large" placeholder="Example: Free lunch served"/>
-                    </Row>
+					<Row>
+						<h4>What is your service?</h4>
+						<p>Enter a short sentence about what you are providing for this service.</p>
+						<Input size="large" placeholder="Example: Free lunch served" />
+					</Row>
 					<Row>
 						<h4>Select your service type</h4>
 						<Radio.Group
@@ -101,7 +101,7 @@ const CreatePost = (props) => {
 							{!serviceRecurring && <h4>Service date</h4>}
 							{serviceRecurring && <h4>Service starts on</h4>}
 							<DatePicker
-                                format={dateFormat}
+								format={dateFormat}
 								onChange={(date, dateString) => {
 									console.log('service date', date, dateString);
 								}}
@@ -109,27 +109,31 @@ const CreatePost = (props) => {
 						</Col>
 						<Col xs={24} md={8}>
 							<h4>Start time</h4>
-							<DatePicker
-                                format={dateFormat}
-								onChange={(date, dateString) => {
-									console.log('service date', date, dateString);
+							<TimePicker
+								use12Hours
+								format="h:mm a"
+								onChange={(time, timeString) => {
+									console.log('time changed', time);
 								}}
+								placeholder="Select start time"
 							/>
 						</Col>
 						<Col xs={24} md={8}>
 							<h4>End time</h4>
-							<DatePicker
-                                format={dateFormat}
-								onChange={(date, dateString) => {
-									console.log('service date', date, dateString);
+							<TimePicker
+								use12Hours
+								format="h:mm a"
+								onChange={(time, timeString) => {
+									console.log('time changed', time);
 								}}
+								placeholder="Select end time"
 							/>
 						</Col>
 					</Row>
 					{serviceRecurring && (
 						<Row>
 							<Col xs={24}>
-								<h4 style={{marginBottom: '15px'}}>
+								<h4 style={{ marginBottom: '15px' }}>
 									Service repeats{' '}
 									<Select size="large" style={{ width: '220px' }}>
 										<Option value="every">Every</Option>
@@ -186,10 +190,10 @@ const CreatePost = (props) => {
 					</p>
 					<Row>
 						<Col sm={18}>
-							<Input size="large" placeholder="Address"/>
+							<Input size="large" placeholder="Address" />
 						</Col>
 						<Col sm={6}>
-							<Button size="large" icon="environment" style={{width: '100%'}}>
+							<Button size="large" icon="environment" style={{ width: '100%' }}>
 								Use My Location
 							</Button>
 						</Col>
@@ -286,22 +290,29 @@ const CreatePost = (props) => {
 							}}
 						/>
 					</Row>
-
-                    
 				</Card>
 			</Row>
 
-            <Row>
-                <Card>
-                    <Row>
-                        <h3 className="__card-title"><Icon type="carry-out" /> Ready?</h3>
-                        <h4>Ready to start your service?</h4>
-                        <p>Please double check and make sure all information entered above are correct before proceeding to start.</p>
-                        <Button icon="check-circle" size="large" type="primary" style={{marginRight: '15px'}}>Start this service now</Button>
-                        <Button icon="save" size="large">Save and preview</Button>
-                    </Row>
-                </Card>
-            </Row>
+			<Row>
+				<Card>
+					<Row>
+						<h3 className="__card-title">
+							<Icon type="carry-out" /> Ready?
+						</h3>
+						<h4>Ready to start your service?</h4>
+						<p>
+							Please double check and make sure all information entered above are correct before
+							proceeding to start.
+						</p>
+						<Button icon="check-circle" size="large" type="primary" style={{ marginRight: '15px' }}>
+							Start this service now
+						</Button>
+						<Button icon="save" size="large">
+							Save and preview
+						</Button>
+					</Row>
+				</Card>
+			</Row>
 		</Layout>
 	);
 };

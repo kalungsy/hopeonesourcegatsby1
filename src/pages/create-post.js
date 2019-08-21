@@ -33,8 +33,7 @@ const { Option } = Select;
 
 const CreatePostForm = (props) => {
 	let [ loading, setLoading ] = useState(false);
-	let [ messageCharCount, setMessageCharCount ] = useState(0);
-	let [ serviceRecurring, setServiceRecurring ] = useState(false);
+	let [ messageCharCount, setMessageCharCount ] = useState(0);	
 	let [ serviceRecurringEvery, setServiceRecurringEvery ] = useState('every week');
 	let [ messageSendTime, setMessageSendTime ] = useState(1);
 	let [ myCoordinates, setMyCoordinates ] = useState({ lat: 37.7577, long: -122.4376 });
@@ -88,7 +87,7 @@ const CreatePostForm = (props) => {
 		});
 	};
 
-	const { getFieldDecorator } = props.form;
+	const { getFieldDecorator, setFieldsValue, getFieldsValue, getFieldValue } = props.form;
 
 	return (
 		<Layout>
@@ -128,22 +127,32 @@ const CreatePostForm = (props) => {
 						</Row>
 						<Row>
 							<h4>Select your service type</h4>
-							<Radio.Group
-								className="__flex"
-								onChange={(e) => {
-									setServiceRecurring(e.target.value);
-									console.log('values', e.target.value);
-								}}
-								value={serviceRecurring}
-							>
-								<Radio value={false}>One Time</Radio>
-								<Radio value={true}>Recurring</Radio>
-							</Radio.Group>
+							<Form.Item>
+								{getFieldDecorator('service_type', {
+									rules: [
+										{
+											required: true,
+											message: 'This is required.'
+										}
+									],
+									initialValue: 'one_time',
+								})(
+									<Radio.Group
+										className="__flex"
+										onChange={(e) => {
+											setFieldsValue({'service_type': e.target.value})
+										}}
+									>
+										<Radio value={'one_time'}>One Time</Radio>
+										<Radio value={'recurring'}>Recurring</Radio>
+									</Radio.Group>
+								)}
+							</Form.Item>
 						</Row>
 						<Row>
 							<Col xs={24} md={8}>
-								{!serviceRecurring && <h4>Service date</h4>}
-								{serviceRecurring && <h4>Service starts on</h4>}
+								{getFieldValue('service_type') === 'one_time' && <h4>Service date</h4>}
+								{getFieldValue('service_type') === 'recurring' && <h4>Service starts on</h4>}
 								<DatePicker
 									readonly="true"
 									format={dateFormat}
@@ -181,7 +190,7 @@ const CreatePostForm = (props) => {
 								/>
 							</Col>
 						</Row>
-						{serviceRecurring && (
+						{getFieldValue('service_type') === 'recurring' && (
 							<Row>
 								<Col xs={24}>
 									<h4 style={{ marginBottom: '15px' }}>
@@ -247,7 +256,7 @@ const CreatePostForm = (props) => {
 								</Col>
 							</Row>
 						)}
-						{serviceRecurring && (
+						{getFieldValue('service_type') === 'recurring' && (
 							<Row>
 								<Col xs={24} md={8}>
 									<h4>Service's last day is on</h4>

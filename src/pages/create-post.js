@@ -192,10 +192,11 @@ const CreatePost = (props) => {
 											defaultValue={[ 1 ]}
 											style={{ minWidth: '150px', width: 'auto', marginRight: '8px' }}
 										>
-											<Option value={1}>First</Option>
-											<Option value={2}>Second</Option>
-											<Option value={3}>Third</Option>
-											<Option value={4}>Last</Option>
+											<Option value={1}>1st</Option>
+											<Option value={2}>2nd</Option>
+											<Option value={3}>3rd</Option>
+											<Option value={4}>4th</Option>
+											<Option value={5}>Last</Option>
 										</Select>
 									)}
 									week on ...

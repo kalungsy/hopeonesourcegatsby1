@@ -4,7 +4,20 @@ import Layout from '../components/layout';
 import { useStaticQuery, graphql } from 'gatsby';
 import Image from '../components/image';
 import SEO from '../components/seo';
-import { Select, Checkbox, DatePicker, TimePicker, Input, Radio, Button, Card, Row, Col, Icon, notification } from 'antd';
+import {
+	Select,
+	Checkbox,
+	DatePicker,
+	TimePicker,
+	Input,
+	Radio,
+	Button,
+	Card,
+	Row,
+	Col,
+	Icon,
+	notification
+} from 'antd';
 import DateRange from '../components/form-components/date-picker';
 import Map from '../components/form-components/map';
 import { getWebLocation, getGeoFeature } from '../components/utils';
@@ -26,6 +39,7 @@ const CreatePost = (props) => {
 	let [ myCoordinates, setMyCoordinates ] = useState({ lat: 37.7577, long: -122.4376 });
 	let [ usingMyLocation, setUsingMyLocation ] = useState(false);
 	let [ geoFeatureData, setGeoFeatureData ] = useState(null);
+	let [ address, setAddress ] = useState('');
 
 	const dateFormat = 'MM/DD/YYYY';
 	const categoriesOptions = [
@@ -257,9 +271,14 @@ const CreatePost = (props) => {
 									geoFeatureData && geoFeatureData.features.length ? (
 										geoFeatureData.features[0].place_name
 									) : (
-										''
+										address
 									)
 								}
+								onChange={(e) => {
+									e.preventDefault();
+									setGeoFeatureData(null);
+									setAddress(e.target.value);
+								}}
 							/>
 						</Col>
 						<Col sm={6}>
@@ -274,29 +293,40 @@ const CreatePost = (props) => {
 										return await getWebLocation();
 									}
 
-									await fetchLocation().then(async (result) => {
-										console.log('My corrdinates', result);
-										if (result) {
-											setMyCoordinates({
-												lat: result.lat,
-												long: result.long
+									await fetchLocation()
+										.then(async (result) => {
+											console.log('My corrdinates', result);
+											if (result) {
+												setMyCoordinates({
+													lat: result.lat,
+													long: result.long
+												});
+												setUsingMyLocation(true);
+												let fetchedGeoFeatures = await getGeoFeature(result.long, result.lat);
+												setGeoFeatureData(fetchedGeoFeatures);
+											}
+										})
+										.catch((e) => {
+											notification.open({
+												key: 'location-service-blocked',
+												message: 'Location Service Blocked',
+												description: `Please enable your browser's location service to retreive your current location automatically.`,
+												icon: <Icon type="warning" style={{ color: '#red' }} />,
+												duration: 0,
+												btn: (
+													<Button
+														size="large"
+														type="link"
+														onClick={() => {
+															notification.close('location-service-blocked');
+														}}
+													>
+														Close
+													</Button>
+												)
 											});
-											setUsingMyLocation(true);
-											let fetchedGeoFeatures = await getGeoFeature(result.long, result.lat);
-											setGeoFeatureData(fetchedGeoFeatures);
-										}
-									}).catch(e => {
-										notification.open({
-											key: 'location-service-blocked',
-											message: 'Location Service Blocked',
-											description:
-												`Please enable your browser's location service to retreive your current location automatically.`,
-											icon: <Icon type="warning" style={{ color: '#red' }} />,
-											duration: 0,
-											btn: <Button size="large" type="link" onClick={()=>{notification.close('location-service-blocked')}}>Close</Button>
+											console.log('caught error');
 										});
-										console.log('caught error')
-									});
 									setLoading(false);
 								}}
 							>

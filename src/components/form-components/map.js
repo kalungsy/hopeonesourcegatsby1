@@ -85,58 +85,58 @@ const Map = (props) => {
 	});
 
 	return (
-		<ReactMapGL
-			{...viewport}
-			mapboxApiAccessToken="pk.eyJ1Ijoia2FsdW5nc3kiLCJhIjoiY2p6ajJhaXBrMDVpaDNjcGVmNGhya3kwaSJ9.05anissI745dE-7itWE92g"
-			onViewportChange={async (viewport) => {
-				setViewport(viewport);
-				setUsingMyLocation(false);
-				setCoordinates({
-					lat: viewport.latitude,
-					long: viewport.longitude
-				});
-			}}
-			onTransitionEnd={(e) => {
-				console.log('transition ended', e);
-			}}
-			onInteractionStateChange={(interactionState) => {
-				if (interactionState.isDragging) {
-					console.log('Dragging', interactionState);
-					setIsDragging(interactionState.isDragging);
-				} else {
-					setIsDragging('done');
-				}
-			}}
-		>
-			<Marker
-				draggable
-				latitude={viewport.latitude}
-				longitude={viewport.longitude}
-				offsetLeft={-20}
-				offsetTop={-10}
-				// onDragEnd={(e)=>{
-				// 	e.preventDefault();
-				// 	console.log('drag ended', e)
-				// 	setViewport({
-				// 		...viewport,
-				// 		latitude: e.lngLat[0],
-				// 		longitude: e.lngLat[1]
-				// 	})
-				// }}
+		<div className="form-map">
+			<ReactMapGL
+				{...viewport}
+				mapboxApiAccessToken="pk.eyJ1Ijoia2FsdW5nc3kiLCJhIjoiY2p6ajJhaXBrMDVpaDNjcGVmNGhya3kwaSJ9.05anissI745dE-7itWE92g"
+				onViewportChange={async (viewport) => {
+					setViewport(viewport);
+					setUsingMyLocation(false);
+					setCoordinates({
+						lat: viewport.latitude,
+						long: viewport.longitude
+					});
+				}}
+				onTransitionEnd={(e) => {
+					console.log('transition ended', e);
+				}}
+				onInteractionStateChange={(interactionState) => {
+					if (interactionState.isDragging) {
+						console.log('Dragging', interactionState);
+						setIsDragging(interactionState.isDragging);
+					} else {
+						setIsDragging('done');
+					}
+				}}
 			>
-				<Icon type="environment" style={{ fontSize: '2.5em', color: 'red' }} theme="filled" />
-			</Marker>
+				<Marker
+					draggable
+					latitude={viewport.latitude}
+					longitude={viewport.longitude}
+					offsetLeft={-20}
+					offsetTop={-10}
+					// onDragEnd={(e)=>{
+					// 	e.preventDefault();
+					// 	console.log('drag ended', e)
+					// 	setViewport({
+					// 		...viewport,
+					// 		latitude: e.lngLat[0],
+					// 		longitude: e.lngLat[1]
+					// 	})
+					// }}
+				>
+					<Icon type="environment" style={{ fontSize: '2.5em', color: 'red' }} theme="filled" />
+				</Marker>
 
-			{geoFeatureData &&
-			geoFeatureData.features.length && (
-				<Card style={{ width: '45%', top: '10px', left: '10px' }}>
-					<h4>
-						{geoFeatureData.features[0].place_name}
-					</h4>
-				</Card>
-			)}
-			{/* <span>{`Lat: ${viewport.latitude}, Long: ${viewport.longitude}`}</span> */}
-		</ReactMapGL>
+				{geoFeatureData &&
+				geoFeatureData.features.length && (
+					<Card className={`__map-address-card`} style={{ width: '45%', top: '10px', left: '10px' }}>
+						<h4>{geoFeatureData.features[0].place_name}</h4>
+					</Card>
+				)}
+				{/* <span>{`Lat: ${viewport.latitude}, Long: ${viewport.longitude}`}</span> */}
+			</ReactMapGL>
+		</div>
 	);
 };
 

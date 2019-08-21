@@ -8,6 +8,7 @@ import { Select, Checkbox, DatePicker, TimePicker, Input, Radio, Button, Card, R
 import DateRange from '../components/form-components/date-picker';
 import Map from '../components/form-components/map';
 import { getWebLocation, getGeoFeature } from '../components/utils';
+import moment from 'moment';
 
 const settings = {
 	messageLimit: 300
@@ -110,6 +111,8 @@ const CreatePost = (props) => {
 							<DatePicker
 								readonly="true"
 								format={dateFormat}
+								showToday={false}
+								defaultValue={moment()}
 								onChange={(date, dateString) => {
 									console.log('service date', date, dateString);
 								}}
@@ -121,6 +124,7 @@ const CreatePost = (props) => {
 								readonly="true"
 								use12Hours
 								format="h:mm a"
+								defaultValue={moment('06:00', 'HH:mm')}
 								onChange={(time, timeString) => {
 									console.log('time changed', time);
 								}}
@@ -133,6 +137,7 @@ const CreatePost = (props) => {
 								readonly="true"
 								use12Hours
 								format="h:mm a"
+								defaultValue={moment('17:00', 'HH:mm')}
 								onChange={(time, timeString) => {
 									console.log('time changed', time);
 								}}

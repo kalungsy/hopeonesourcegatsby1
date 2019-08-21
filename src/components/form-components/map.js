@@ -29,7 +29,9 @@ const Map = (props) => {
 	useEffect(() => {
 		if (loading) {
 			async function fetchLocation() {
-				return await getWebLocation();
+				return await getWebLocation().catch((e) => {
+					console.log('Could not fetchLocation', e.message);
+				});
 			}
 
 			fetchLocation()

@@ -4,7 +4,7 @@ import Layout from '../components/layout';
 import { useStaticQuery, graphql } from 'gatsby';
 import Image from '../components/image';
 import SEO from '../components/seo';
-import { Select, Checkbox, DatePicker, TimePicker, Input, Radio, Button, Card, Row, Col, Icon } from 'antd';
+import { Select, Checkbox, DatePicker, TimePicker, Input, Radio, Button, Card, Row, Col, Icon, notification } from 'antd';
 import DateRange from '../components/form-components/date-picker';
 import Map from '../components/form-components/map';
 import { getWebLocation, getGeoFeature } from '../components/utils';
@@ -265,7 +265,18 @@ const CreatePost = (props) => {
 								onClick={async () => {
 									setLoading('get_my_location');
 									async function fetchLocation() {
-										return await getWebLocation();
+										return await getWebLocation().catch(e => {
+											notification.open({
+												key: 'location-service-blocked',
+												message: 'Location Service Blocked',
+												description:
+													`Please enable your browser's location service to get your current location automatically.`,
+												icon: <Icon type="warning" style={{ color: '#red' }} />,
+												duration: 0,
+												btn: <Button size="large" type="link" onClick={()=>{notification.close('location-service-blocked')}}>Close</Button>
+											});
+											console.log('caught error')
+										});
 									}
 
 									await fetchLocation().then(async (result) => {

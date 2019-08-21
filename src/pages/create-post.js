@@ -265,18 +265,7 @@ const CreatePost = (props) => {
 								onClick={async () => {
 									setLoading('get_my_location');
 									async function fetchLocation() {
-										return await getWebLocation().catch(e => {
-											notification.open({
-												key: 'location-service-blocked',
-												message: 'Location Service Blocked',
-												description:
-													`Please enable your browser's location service to get your current location automatically.`,
-												icon: <Icon type="warning" style={{ color: '#red' }} />,
-												duration: 0,
-												btn: <Button size="large" type="link" onClick={()=>{notification.close('location-service-blocked')}}>Close</Button>
-											});
-											console.log('caught error')
-										});
+										return await getWebLocation();
 									}
 
 									await fetchLocation().then(async (result) => {
@@ -290,6 +279,17 @@ const CreatePost = (props) => {
 											let fetchedGeoFeatures = await getGeoFeature(result.long, result.lat);
 											setGeoFeatureData(fetchedGeoFeatures);
 										}
+									}).catch(e => {
+										notification.open({
+											key: 'location-service-blocked',
+											message: 'Location Service Blocked',
+											description:
+												`Please enable your browser's location service to retreive your current location automatically.`,
+											icon: <Icon type="warning" style={{ color: '#red' }} />,
+											duration: 0,
+											btn: <Button size="large" type="link" onClick={()=>{notification.close('location-service-blocked')}}>Close</Button>
+										});
+										console.log('caught error')
 									});
 									setLoading(false);
 								}}

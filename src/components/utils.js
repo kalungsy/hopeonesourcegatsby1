@@ -1,7 +1,7 @@
 const getWebLocation = async () => {
 	let locationPermission;
 
-	await navigator.permissions
+	return navigator.permissions
 		.query({
 			name: 'geolocation'
 		})

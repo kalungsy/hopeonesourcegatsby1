@@ -1,4 +1,4 @@
-body{
+body {
 	background-color: #fbfdff !important;
 }
 
@@ -18,16 +18,15 @@ body{
 	}
 }
 
-.form-map{
-	.__map-address-card{
-
-		background: rgba(255, 255, 255, 0.68);		
+.form-map {
+	.__map-address-card {
+		background: rgba(255, 255, 255, 0.68);
 
 		@media only screen and (min-device-width: 375px) and (max-device-width: 667px) {
 			display: none;
 		}
 
-		h4{
+		h4 {
 			line-height: 1.65em;
 		}
 	}
@@ -43,8 +42,14 @@ body{
 	}
 }
 
-.ant-select{
-	.ant-select-selection__choice, .ant-select-search{
+.ant-btn-lg,
+.ant-input-lg{
+	min-height: 60px;
+}
+
+.ant-select {
+	.ant-select-selection__choice,
+	.ant-select-search {
 		margin-bottom: 0;
 	}
 }
@@ -52,10 +57,10 @@ body{
 .ant-calendar-picker,
 .ant-time-picker {
 	margin-right: 15px;
-    display: block;
-    min-width: 270px;
-    width: 30%;
-    max-width: 100%;
+	display: block;
+	min-width: 270px;
+	width: 30%;
+	max-width: 100%;
 
 	@media only screen and (min-device-width: 375px) and (max-device-width: 667px) {
 		width: 100%;
@@ -77,9 +82,9 @@ body{
 }
 
 .ant-time-picker-panel-input,
-.ant-calendar-input-wrap{
-    padding: 20px 19px;
-    height: 47px;
+.ant-calendar-input-wrap {
+	padding: 20px 19px;
+	height: 47px;
 }
 
 .ant-calendar-picker,
@@ -131,15 +136,15 @@ body{
 			label.ant-radio-wrapper {
 				width: calc(100% / 5);
 			}
-        }
-        &.__col-7 {
+		}
+		&.__col-7 {
 			label.ant-checkbox-group-item,
 			label.ant-radio-wrapper {
-                width: calc(100% / 9);
-                
-                @media only screen and (min-device-width: 375px) and (max-device-width: 667px) {
-                    width: calc(100% / 3);
-                }
+				width: calc(100% / 9);
+
+				@media only screen and (min-device-width: 375px) and (max-device-width: 667px) {
+					width: calc(100% / 3);
+				}
 			}
 		}
 

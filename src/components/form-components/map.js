@@ -1,37 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import ReactMapGL, {Marker} from 'react-map-gl';
-import {Icon} from 'antd';
-
-const getWebLocation = () => {
-	return new Promise((resolve, reject) => {
-		if (navigator.geolocation) {
-			/* geolocation is available */
-			navigator.geolocation.getCurrentPosition(
-				(position) => {
-					console.log('getting locationo', position);
-					resolve({ lat: position.coords.latitude, long: position.coords.longitude });
-				},
-				() => {
-					resolve({
-						lat: 37.7577,
-						long: -122.4376
-					});
-					console.error('error getting location');
-				}
-			);
-		} else {
-			/* geolocation IS NOT available */
-			console.log('gelocation not available');
-			const reason = new Error('Geolocation is not available');
-			reject(reason);
-		}
-	});
-};
+import ReactMapGL, { Marker } from 'react-map-gl';
+import { Icon, Card } from 'antd';
+import { getWebLocation, getGeoFeature } from '../utils';
 
 const Map = (props) => {
-    const { setCoordinates } = props;
-    
-    let mapHeight = '450px';
+	const {
+		myCoordinates,
+		setCoordinates,
+		usingMyLocation,
+		setUsingMyLocation,
+		parentGeoFeatureData,
+		setParentGeoFeatureData
+	} = props;
+
+	let mapHeight = '450px';
 
 	let [ viewport, setViewport ] = useState({
 		width: '100%',
@@ -41,6 +23,8 @@ const Map = (props) => {
 		zoom: 8
 	});
 	let [ loading, setLoading ] = useState(true);
+	let [ geoFeatureData, setGeoFeatureData ] = useState(null);
+	let [ isDragging, setIsDragging ] = useState(false);
 
 	useEffect(() => {
 		if (loading) {
@@ -48,18 +32,53 @@ const Map = (props) => {
 				return await getWebLocation();
 			}
 
-			fetchLocation().then((result) => {
-				console.log('location', result);
-				if (result) {
-					setViewport({
-						...viewport,
-						latitude: result.lat,
-						longitude: result.long,
-						zoom: 15
-					});
-				}
-			});
+			fetchLocation()
+				.then((result) => {
+					console.log('location', result);
+					if (result) {
+						setViewport({
+							...viewport,
+							latitude: result.lat,
+							longitude: result.long,
+							zoom: 15
+						});
+					}
+				})
+				.catch((e) => {
+					console.log(e);
+				});
 			setLoading(false);
+		}
+
+		if (usingMyLocation && myCoordinates.lat != viewport.latitude && myCoordinates != viewport.longitude) {
+			setViewport({
+				...viewport,
+				latitude: myCoordinates.lat,
+				longitude: myCoordinates.long
+			});
+		}
+
+		if (parentGeoFeatureData && parentGeoFeatureData.features.length) {
+			if (!geoFeatureData) {
+				setGeoFeatureData(parentGeoFeatureData);
+			} else {
+				if (
+					geoFeatureData.features.length &&
+					geoFeatureData.features[0].place_name != parentGeoFeatureData.features[0].place_name
+				) {
+					setGeoFeatureData(parentGeoFeatureData);
+				}
+			}
+		}
+
+		if (isDragging == 'done') {
+			(async () => {
+				let fetchedGeoFeatures = await getGeoFeature(viewport.longitude, viewport.latitude);
+				setGeoFeatureData(fetchedGeoFeatures);
+				setParentGeoFeatureData(fetchedGeoFeatures);
+				console.log('GeoFeatureData', fetchedGeoFeatures);
+				setIsDragging(false);
+			})();
 		}
 
 		return () => {};
@@ -69,14 +88,32 @@ const Map = (props) => {
 		<ReactMapGL
 			{...viewport}
 			mapboxApiAccessToken="pk.eyJ1Ijoia2FsdW5nc3kiLCJhIjoiY2p6ajJhaXBrMDVpaDNjcGVmNGhya3kwaSJ9.05anissI745dE-7itWE92g"
-			onViewportChange={(viewport) => {
+			onViewportChange={async (viewport) => {
 				setViewport(viewport);
-				if (setCoordinates) {
-					setCoordinates(viewport.latitude, viewport.longitude);
+				setUsingMyLocation(false);
+				setCoordinates({
+					lat: viewport.latitude,
+					long: viewport.longitude
+				});
+			}}
+			onTransitionEnd={(e) => {
+				console.log('transition ended', e);
+			}}
+			onInteractionStateChange={(interactionState) => {
+				if (interactionState.isDragging) {
+					console.log('Dragging', interactionState);
+					setIsDragging(interactionState.isDragging);
+				} else {
+					setIsDragging('done');
 				}
 			}}
 		>
-			<Marker draggable latitude={viewport.latitude} longitude={viewport.longitude} offsetLeft={-20} offsetTop={-10} 
+			<Marker
+				draggable
+				latitude={viewport.latitude}
+				longitude={viewport.longitude}
+				offsetLeft={-20}
+				offsetTop={-10}
 				// onDragEnd={(e)=>{
 				// 	e.preventDefault();
 				// 	console.log('drag ended', e)
@@ -86,9 +123,18 @@ const Map = (props) => {
 				// 		longitude: e.lngLat[1]
 				// 	})
 				// }}
-				>
-                <Icon type="environment" style={{fontSize: '2.5em', color: 'red'}} theme="filled"/>
+			>
+				<Icon type="environment" style={{ fontSize: '2.5em', color: 'red' }} theme="filled" />
 			</Marker>
+
+			{geoFeatureData &&
+			geoFeatureData.features.length && (
+				<Card style={{ width: '45%', top: '10px', left: '10px' }}>
+					<h4>
+						{geoFeatureData.features[0].place_name}
+					</h4>
+				</Card>
+			)}
 			{/* <span>{`Lat: ${viewport.latitude}, Long: ${viewport.longitude}`}</span> */}
 		</ReactMapGL>
 	);

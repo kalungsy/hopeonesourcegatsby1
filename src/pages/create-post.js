@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'gatsby';
-import { useStaticQuery, graphql } from 'gatsby';
 import Layout from '../components/layout';
+import { useStaticQuery, graphql } from 'gatsby';
 import Image from '../components/image';
 import SEO from '../components/seo';
 import { Select, Checkbox, DatePicker, TimePicker, Input, Radio, Button, Card, Row, Col, Icon } from 'antd';
 import DateRange from '../components/form-components/date-picker';
 import Map from '../components/form-components/map';
+import { getWebLocation, getGeoFeature } from '../components/utils';
 
 const settings = {
 	messageLimit: 300
@@ -16,10 +17,14 @@ const TextArea = Input.TextArea;
 const { Option } = Select;
 
 const CreatePost = (props) => {
+	let [ loading, setLoading ] = useState(false);
 	let [ messageCharCount, setMessageCharCount ] = useState(0);
 	let [ serviceRecurring, setServiceRecurring ] = useState(false);
 	let [ serviceRecurringEvery, setServiceRecurringEvery ] = useState('every week');
 	let [ messageSendTime, setMessageSendTime ] = useState(1);
+	let [ myCoordinates, setMyCoordinates ] = useState({ lat: 37.7577, long: -122.4376 });
+	let [ usingMyLocation, setUsingMyLocation ] = useState(false);
+	let [ geoFeatureData, setGeoFeatureData ] = useState(null);
 
 	const dateFormat = 'MM/DD/YYYY';
 	const categoriesOptions = [
@@ -157,7 +162,7 @@ const CreatePost = (props) => {
 										<Select
 											mode="multiple"
 											size="large"
-											defaultValue={[1]}
+											defaultValue={[ 1 ]}
 											style={{ minWidth: '150px', width: 'auto', marginRight: '8px' }}
 										>
 											<Option value={1}>January</Option>
@@ -174,11 +179,12 @@ const CreatePost = (props) => {
 											<Option value={12}>December</Option>
 										</Select>
 									)}
-									{(serviceRecurringEvery == 'every month' || serviceRecurringEvery == 'every year') && (
+									{(serviceRecurringEvery == 'every month' ||
+										serviceRecurringEvery == 'every year') && (
 										<Select
 											mode="multiple"
 											size="large"
-											defaultValue={[1]}
+											defaultValue={[ 1 ]}
 											style={{ minWidth: '150px', width: 'auto', marginRight: '8px' }}
 										>
 											<Option value={1}>First</Option>
@@ -238,16 +244,58 @@ const CreatePost = (props) => {
 					</p>
 					<Row>
 						<Col sm={18}>
-							<Input size="large" placeholder="Address" />
+							<Input
+								size="large"
+								placeholder="Address"
+								value={
+									geoFeatureData && geoFeatureData.features.length ? (
+										geoFeatureData.features[0].place_name
+									) : (
+										''
+									)
+								}
+							/>
 						</Col>
 						<Col sm={6}>
-							<Button size="large" icon="environment" style={{ width: '100%' }}>
-								Use My Location
+							<Button
+								size="large"
+								icon={loading == 'get_my_location' ? `loading` : `environment`}
+								style={{ width: '100%' }}
+								type={usingMyLocation ? 'primary' : 'default'}
+								onClick={async () => {
+									setLoading('get_my_location');
+									async function fetchLocation() {
+										return await getWebLocation();
+									}
+
+									await fetchLocation().then(async (result) => {
+										console.log('My corrdinates', result);
+										if (result) {
+											setMyCoordinates({
+												lat: result.lat,
+												long: result.long
+											});
+											setUsingMyLocation(true);
+											let fetchedGeoFeatures = await getGeoFeature(result.long, result.lat);
+											setGeoFeatureData(fetchedGeoFeatures);
+										}
+									});
+									setLoading(false);
+								}}
+							>
+								{usingMyLocation ? 'Using Your' : 'Use My'} Location
 							</Button>
 						</Col>
 					</Row>
 					<Row>
-						<Map />
+						<Map
+							myCoordinates={myCoordinates}
+							setCoordinates={setMyCoordinates}
+							usingMyLocation={usingMyLocation}
+							setUsingMyLocation={setUsingMyLocation}
+							parentGeoFeatureData={geoFeatureData}
+							setParentGeoFeatureData={setGeoFeatureData}
+						/>
 					</Row>
 				</Card>
 			</Row>

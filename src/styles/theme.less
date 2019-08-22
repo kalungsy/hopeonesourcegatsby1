@@ -74,9 +74,19 @@ p {
 }
 
 .ant-btn-lg,
-.ant-input-lg {
+.ant-input-lg,
+.ant-select-lg {
 	min-height: 60px;
+
+	.ant-select-selection, .ant-select-selection__rendered{
+		height: 60px !important;
+		line-height: 54px !important;
+	}
+	.ant-select-selection-selected-value{
+		font-weight: 700;
+	}
 }
+
 
 .ant-select {
 	.ant-select-selection__choice,
@@ -199,5 +209,35 @@ p {
 	label.ant-radio-wrapper-checked {
 		background: #1890ff;
 		color: white;
+	}
+}
+
+.flex{
+	display: flex;
+	&.__row{
+		flex-direction: row;
+
+		&.__gap{
+			
+			& > *{
+				margin-right: 15px;
+			}
+		}
+	}
+	&.__column{
+		flex-direction: column;
+
+		&.__gap{
+			
+			& > *{
+				margin-bottom: 15px;
+			}
+		}
+	}
+	&.__middle{
+		align-items: center;
+	}
+	&.__center{
+		justify-content: center;
 	}
 }

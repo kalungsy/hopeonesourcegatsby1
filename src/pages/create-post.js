@@ -36,6 +36,7 @@ const { Option } = Select;
 const CreatePostForm = (props) => {
 	let [ loading, setLoading ] = useState(false);
 	let [ imageUrl, setImageUrl ] = useState('');
+	let [ excIncDates, setExcIncDates ] = useState([ { exclude: true, date: null } ]);
 	let [ messageCharCount, setMessageCharCount ] = useState(0);
 	let [ serviceRecurringEvery, setServiceRecurringEvery ] = useState('every week');
 	let [ messageSendTime, setMessageSendTime ] = useState(1);
@@ -43,6 +44,8 @@ const CreatePostForm = (props) => {
 	let [ usingMyLocation, setUsingMyLocation ] = useState(false);
 	let [ geoFeatureData, setGeoFeatureData ] = useState(null);
 	let [ address, setAddress ] = useState('');
+
+	console.log("rendered state", excIncDates);
 
 	const dateFormat = 'MM/DD/YYYY';
 	const categoriesOptions = [
@@ -285,8 +288,11 @@ const CreatePostForm = (props) => {
 						</Row>
 
 						<Row>
-							<h4>Upload Flyer Image</h4>
-							<p>This image will be displayed on your service post. You can upload an image such as flyer about your service / event.</p>
+							<h4>Upload Flyer Image (Optional)</h4>
+							<p>
+								This image will be displayed on your service post. You can upload an image such as flyer
+								about your service / event.
+							</p>
 							<Upload
 								name="flyer_upload"
 								listType="picture-card"
@@ -317,6 +323,70 @@ const CreatePostForm = (props) => {
 									</div>
 								)}
 							</Upload>
+						</Row>
+
+						<Row>
+							<h4>Exclude or Include Certain Dates (Optional)</h4>
+							<p>
+								Select dates you want to include or exclude, such as Hoildays that you might be closed
+								or open.
+							</p>
+							<div className="flex __column __gap">
+								{excIncDates.map((item, i) => (
+									<div key={i} className="flex __row __middle __gap">
+										<Select value="exclude" size="large" style={{ width: '160px', height: '60px' }}>
+											<Option value="exclude">Exclude</Option>
+											<Option value="include">Include</Option>
+										</Select>
+										<DatePicker data-index={i} value={item.date} onChange={(val, valString)=>{
+											console.log("excIncDate", val, valString);
+											setExcIncDates([
+												...excIncDates.slice(0, i),
+												{exclude: false, date: val},
+												...excIncDates.slice(i + 1)
+											])
+										}}/>
+										{i == excIncDates.length - 1 ? (
+											<Button
+												size="large"
+												type="link"
+												onClick={() => {
+													setExcIncDates([
+														...excIncDates,
+														{ exclude: false, date: null }
+													]);
+												}}
+											>
+												<Icon type="plus" /> add more
+											</Button>
+										) : (
+											<Button
+												size="large"
+												type="link"
+												onClick={(e) => {
+													setExcIncDates([
+														...excIncDates.slice(0, i),
+														...excIncDates.slice(i + 1)
+													]);
+												}}
+											>
+												<Icon type="minus" /> remove
+											</Button>
+										)}
+										{(i == excIncDates.length - 1 && item.date !== null) && (
+											<Button
+												size="large"
+												type="link"
+												onClick={() => {
+													console.log("clear to be")
+												}}
+											>
+												<Icon type="delete" /> clear
+											</Button>
+										)}
+									</div>
+								))}
+							</div>
 						</Row>
 					</Card>
 				</Row>
@@ -516,8 +586,8 @@ const CreatePostForm = (props) => {
 							</h3>
 							<h4>Ready to post your service?</h4>
 							<p>
-								Please save and preview first, double check and make sure all information entered above are correct before
-								proceeding to post.
+								Please save and preview first, double check and make sure all information entered above
+								are correct before proceeding to post.
 							</p>
 							{/* <Button
 								icon="check-circle"

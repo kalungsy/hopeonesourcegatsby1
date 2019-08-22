@@ -27,7 +27,7 @@ import { getWebLocation, getGeoFeature } from '../components/utils';
 import moment from 'moment';
 
 const settings = {
-	messageLimit: 300
+	messageLimit: 150
 };
 const CheckboxGroup = Checkbox.Group;
 const TextArea = Input.TextArea;
@@ -286,7 +286,7 @@ const CreatePostForm = (props) => {
 
 						<Row>
 							<h4>Upload Image</h4>
-							<p>You can upload an image, such as a flyer for your service / event.</p>
+							<p>This image will be displayed on your service post. You can upload an image such as flyer about your service / event.</p>
 							<Upload
 								name="flyer_upload"
 								listType="picture-card"
@@ -301,8 +301,8 @@ const CreatePostForm = (props) => {
 									}
 									if (info.file.status === 'done') {
 										// Get this url from response in real world.
-										getBase64(info.file.originFileObj, imageUrl =>{
-											setImageUrl(imageUrl)
+										getBase64(info.file.originFileObj, (imageUrl) => {
+											setImageUrl(imageUrl);
 											setLoading(false);
 										});
 									}
@@ -516,10 +516,10 @@ const CreatePostForm = (props) => {
 							</h3>
 							<h4>Ready to post your service?</h4>
 							<p>
-								Please double check and make sure all information entered above are correct before
+								Please save and preview first, double check and make sure all information entered above are correct before
 								proceeding to post.
 							</p>
-							<Button
+							{/* <Button
 								icon="check-circle"
 								size="large"
 								type="primary"
@@ -527,8 +527,14 @@ const CreatePostForm = (props) => {
 								htmlType="submit"
 							>
 								Post this service now
-							</Button>
-							<Button icon="save" size="large">
+							</Button> */}
+							<Button
+								icon="save"
+								type="primary"
+								size="large"
+								style={{ marginRight: '15px' }}
+								htmlType="submit"
+							>
 								Save and preview
 							</Button>
 						</Row>

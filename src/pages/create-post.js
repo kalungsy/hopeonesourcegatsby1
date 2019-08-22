@@ -12,12 +12,14 @@ import {
 	TimePicker,
 	Input,
 	Radio,
+	Upload,
 	Button,
 	Card,
 	Row,
 	Col,
 	Icon,
-	notification
+	notification,
+	message
 } from 'antd';
 import DateRange from '../components/form-components/date-picker';
 import Map from '../components/form-components/map';
@@ -33,7 +35,8 @@ const { Option } = Select;
 
 const CreatePostForm = (props) => {
 	let [ loading, setLoading ] = useState(false);
-	let [ messageCharCount, setMessageCharCount ] = useState(0);	
+	let [ imageUrl, setImageUrl ] = useState('');
+	let [ messageCharCount, setMessageCharCount ] = useState(0);
 	let [ serviceRecurringEvery, setServiceRecurringEvery ] = useState('every week');
 	let [ messageSendTime, setMessageSendTime ] = useState(1);
 	let [ myCoordinates, setMyCoordinates ] = useState({ lat: 37.7577, long: -122.4376 });
@@ -135,12 +138,12 @@ const CreatePostForm = (props) => {
 											message: 'This is required.'
 										}
 									],
-									initialValue: 'one_time',
+									initialValue: 'one_time'
 								})(
 									<Radio.Group
 										className="__flex"
 										onChange={(e) => {
-											setFieldsValue({'service_type': e.target.value})
+											setFieldsValue({ service_type: e.target.value });
 										}}
 									>
 										<Radio value={'one_time'}>One Time</Radio>
@@ -279,6 +282,41 @@ const CreatePostForm = (props) => {
 									setMessageCharCount(e.target.value.length);
 								}}
 							/>
+						</Row>
+
+						<Row>
+							<h4>Upload Image</h4>
+							<p>You can upload an image, such as a flyer for your service / event.</p>
+							<Upload
+								name="flyer_upload"
+								listType="picture-card"
+								className="avatar-uploader"
+								showUploadList={false}
+								action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+								beforeUpload={beforeUpload}
+								onChange={(info) => {
+									if (info.file.status === 'uploading') {
+										setLoading('flyer_upload');
+										return;
+									}
+									if (info.file.status === 'done') {
+										// Get this url from response in real world.
+										getBase64(info.file.originFileObj, imageUrl =>{
+											setImageUrl(imageUrl)
+											setLoading(false);
+										});
+									}
+								}}
+							>
+								{imageUrl ? (
+									<img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+								) : (
+									<div>
+										<Icon type={loading === 'flyer_upload' ? 'loading' : 'plus'} />
+										<div className="ant-upload-text">Upload</div>
+									</div>
+								)}
+							</Upload>
 						</Row>
 					</Card>
 				</Row>
@@ -500,6 +538,24 @@ const CreatePostForm = (props) => {
 		</Layout>
 	);
 };
+
+function getBase64(img, callback) {
+	const reader = new FileReader();
+	reader.addEventListener('load', () => callback(reader.result));
+	reader.readAsDataURL(img);
+}
+
+function beforeUpload(file) {
+	const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+	if (!isJpgOrPng) {
+		message.error('You can only upload JPG/PNG file!');
+	}
+	const isLt2M = file.size / 1024 / 1024 < 2;
+	if (!isLt2M) {
+		message.error('Image must smaller than 2MB!');
+	}
+	return isJpgOrPng && isLt2M;
+}
 
 const CreatePost = Form.create({ name: 'create_post' })(CreatePostForm);
 

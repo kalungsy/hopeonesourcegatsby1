@@ -513,6 +513,7 @@ const CreatePostForm = (props) => {
 								information of your available service.
 							</p>
 							<TextArea
+								placeholder={`This message will be auto populated with the information you entered above.`}
 								autosize={{ minRows: 6, maxRows: 8 }}
 								onChange={(e) => {
 									console.log(e.target.value);

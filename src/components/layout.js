@@ -10,7 +10,7 @@ import PropTypes from "prop-types"
 import { useStaticQuery, graphql } from "gatsby"
 import { Helmet } from "react-helmet"
 import Header from "./header"
-import "./layout.css"
+// import "./layout.css"
 import "../styles/theme.less"
 
 const Layout = ({ children }) => {

@@ -285,7 +285,7 @@ const CreatePostForm = (props) => {
 						</Row>
 
 						<Row>
-							<h4>Upload Image</h4>
+							<h4>Upload Flyer Image</h4>
 							<p>This image will be displayed on your service post. You can upload an image such as flyer about your service / event.</p>
 							<Upload
 								name="flyer_upload"

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'gatsby';
 import Layout from '../components/layout';
 import { useStaticQuery, graphql } from 'gatsby';
@@ -23,7 +23,7 @@ import {
 } from 'antd';
 import DateRange from '../components/form-components/date-picker';
 import Map from '../components/form-components/map';
-import { getWebLocation, getGeoFeature } from '../components/utils';
+import { getWebLocation, getGeoFeature, getGeoIpInfo } from '../components/utils';
 import moment from 'moment';
 
 const settings = {
@@ -34,7 +34,7 @@ const TextArea = Input.TextArea;
 const { Option } = Select;
 
 const CreatePostForm = (props) => {
-	let [ loading, setLoading ] = useState(false);
+	let [ loading, setLoading ] = useState('initial');
 	let [ imageUrl, setImageUrl ] = useState('');
 	let [ excIncDates, setExcIncDates ] = useState([ { exclude: true, date: null } ]);
 	let [ messageCharCount, setMessageCharCount ] = useState(0);
@@ -94,6 +94,18 @@ const CreatePostForm = (props) => {
 	};
 
 	const { getFieldDecorator, setFieldsValue, getFieldsValue, getFieldValue } = props.form;
+
+	useEffect(() => {
+		
+		if(loading === 'initial'){
+			const geoIpResult = getGeoIpInfo();
+			console.log('geoIpResult', geoIpResult)
+			if(geoIpResult.latitude && geoIpResult.longtitue){
+				setMyCoordinates({lat: geoIpResult.latitude, long: geoIpResult.longtitue})
+			}
+		}
+
+	})
 
 	return (
 		<Layout>

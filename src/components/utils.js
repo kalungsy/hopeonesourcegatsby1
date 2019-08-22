@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const getWebLocation = async () => {
 	let locationPermission;
 
@@ -51,4 +53,18 @@ const getGeoFeature = async (long, lat) => {
 	return geoData;
 };
 
-export { getWebLocation, getGeoFeature };
+const getGeoIpInfo = async () => {
+
+	//This ipdata.co api has 1500 api call limit for free api keys
+	const data = await axios.get('https://api.ipdata.co?api-key=df0aacfd63cc29ea9ed84a4f072de24a5d7018e7bff8cd8dc2a474d4')
+	.then(function (response) {
+	  return response.data;
+	})
+	.catch(function (error) { 
+	  return error;
+	});	
+
+	return data;
+}
+
+export { getWebLocation, getGeoFeature, getGeoIpInfo };

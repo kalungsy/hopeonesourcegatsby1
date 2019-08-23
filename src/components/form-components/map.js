@@ -18,8 +18,8 @@ const Map = (props) => {
 	let [ viewport, setViewport ] = useState({
 		width: '100%',
 		height: mapHeight,
-		latitude: 37.7577,
-		longitude: -122.4376,
+		latitude: myCoordinates.lat || 37.7577,
+		longitude: myCoordinates.long || -122.4376,
 		zoom: 8
 	});
 	let [ loading, setLoading ] = useState(true);
@@ -27,6 +27,7 @@ const Map = (props) => {
 	let [ isDragging, setIsDragging ] = useState(false);
 
 	useEffect(() => {
+		console.log("ran map effect")
 		if (loading) {
 			async function fetchLocation() {
 				return await getWebLocation().catch((e) => {
@@ -52,7 +53,7 @@ const Map = (props) => {
 			setLoading(false);
 		}
 
-		if (usingMyLocation && myCoordinates.lat != viewport.latitude && myCoordinates != viewport.longitude) {
+		if (usingMyLocation && myCoordinates.lat != viewport.latitude && myCoordinates.long != viewport.longitude) {
 			setViewport({
 				...viewport,
 				latitude: myCoordinates.lat,

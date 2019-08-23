@@ -54,17 +54,16 @@ const getGeoFeature = async (long, lat) => {
 };
 
 const getGeoIpInfo = async () => {
-
 	//This ipdata.co api has 1500 api call limit for free api keys
-	const data = await axios.get('https://api.ipdata.co?api-key=df0aacfd63cc29ea9ed84a4f072de24a5d7018e7bff8cd8dc2a474d4')
-	.then(function (response) {
-	  return response.data;
-	})
-	.catch(function (error) { 
-	  return error;
-	});	
+	console.log("called get geo ip info function.")
+	let url = `https://api.ipdata.co?api-key=df0aacfd63cc29ea9ed84a4f072de24a5d7018e7bff8cd8dc2a474d4`;
+	let ipData;
+	await fetch(url).then((response) => response.json()).then((data) => {
+		console.log('IP data', data);
+		ipData = data;
+	});
 
-	return data;
+	return ipData;
 }
 
 export { getWebLocation, getGeoFeature, getGeoIpInfo };

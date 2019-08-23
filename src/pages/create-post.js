@@ -40,12 +40,12 @@ const CreatePostForm = (props) => {
 	let [ messageCharCount, setMessageCharCount ] = useState(0);
 	let [ serviceRecurringEvery, setServiceRecurringEvery ] = useState('every week');
 	let [ messageSendTime, setMessageSendTime ] = useState(1);
-	let [ myCoordinates, setMyCoordinates ] = useState({ lat: 37.7577, long: -122.4376 });
+	let [ myCoordinates, setMyCoordinates ] = useState({ lat: null, long: null });
 	let [ usingMyLocation, setUsingMyLocation ] = useState(false);
 	let [ geoFeatureData, setGeoFeatureData ] = useState(null);
 	let [ address, setAddress ] = useState('');
 
-	console.log("rendered state", excIncDates);
+	console.log('rendered state', excIncDates);
 
 	const dateFormat = 'MM/DD/YYYY';
 	const categoriesOptions = [
@@ -96,16 +96,23 @@ const CreatePostForm = (props) => {
 	const { getFieldDecorator, setFieldsValue, getFieldsValue, getFieldValue } = props.form;
 
 	useEffect(() => {
-		
-		if(loading === 'initial'){
-			const geoIpResult = getGeoIpInfo();
-			console.log('geoIpResult', geoIpResult)
-			if(geoIpResult.latitude && geoIpResult.longtitue){
-				setMyCoordinates({lat: geoIpResult.latitude, long: geoIpResult.longtitue})
-			}
-		}
+		if (loading === 'initial') {
+			
+			(async () => {
+				const geoIpResult = await getGeoIpInfo();
+				console.log('My geoIpResult', geoIpResult);
+				if (geoIpResult.latitude && geoIpResult.longtitue) {
+					setMyCoordinates({ lat: geoIpResult.latitude, long: geoIpResult.longtitue });
+					setUsingMyLocation(true);
+				}else{
+					setMyCoordinates({ lat: 38.9060434, long: -77.0954141 });
+				}
+			})();
 
-	})
+			setLoading(false);
+			
+		}
+	});
 
 	return (
 		<Layout>
@@ -350,23 +357,24 @@ const CreatePostForm = (props) => {
 											<Option value="exclude">Exclude</Option>
 											<Option value="include">Include</Option>
 										</Select>
-										<DatePicker data-index={i} value={item.date} onChange={(val, valString)=>{
-											console.log("excIncDate", val, valString);
-											setExcIncDates([
-												...excIncDates.slice(0, i),
-												{exclude: false, date: val},
-												...excIncDates.slice(i + 1)
-											])
-										}}/>
+										<DatePicker
+											data-index={i}
+											value={item.date}
+											onChange={(val, valString) => {
+												console.log('excIncDate', val, valString);
+												setExcIncDates([
+													...excIncDates.slice(0, i),
+													{ exclude: false, date: val },
+													...excIncDates.slice(i + 1)
+												]);
+											}}
+										/>
 										{i == excIncDates.length - 1 ? (
 											<Button
 												size="large"
 												type="link"
 												onClick={() => {
-													setExcIncDates([
-														...excIncDates,
-														{ exclude: false, date: null }
-													]);
+													setExcIncDates([ ...excIncDates, { exclude: false, date: null } ]);
 												}}
 											>
 												<Icon type="plus" /> add more
@@ -385,12 +393,13 @@ const CreatePostForm = (props) => {
 												<Icon type="minus" /> remove
 											</Button>
 										)}
-										{(i == excIncDates.length - 1 && item.date !== null) && (
+										{i == excIncDates.length - 1 &&
+										item.date !== null && (
 											<Button
 												size="large"
 												type="link"
 												onClick={() => {
-													console.log("clear to be")
+													console.log('clear to be');
 												}}
 											>
 												<Icon type="delete" /> clear
@@ -488,6 +497,7 @@ const CreatePostForm = (props) => {
 								</Button>
 							</Col>
 						</Row>
+						{myCoordinates.lat && myCoordinates.long && 
 						<Row>
 							<Map
 								myCoordinates={myCoordinates}
@@ -498,6 +508,7 @@ const CreatePostForm = (props) => {
 								setParentGeoFeatureData={setGeoFeatureData}
 							/>
 						</Row>
+						}
 					</Card>
 				</Row>
 

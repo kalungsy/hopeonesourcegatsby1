@@ -18,6 +18,7 @@ import {
 	Row,
 	Col,
 	Icon,
+	Tooltip,
 	notification,
 	message
 } from 'antd';
@@ -537,7 +538,7 @@ const CreatePostForm = (props) => {
 						<Row>
 							<h4>Select the time to send the message</h4>
 							<p>
-								When do you want to send the messages? We recommand sending your message 3 days before
+								When do you want to send the messages? We recommand sending your message 2 days before
 								the service date. You can send messages for recurring services.
 							</p>
 							<Radio.Group
@@ -551,7 +552,7 @@ const CreatePostForm = (props) => {
 								<Radio value={1}>2 Days Before</Radio>
 								<Radio value={2}>24 Hours Before</Radio>
 								<Radio value={3}>2 Hours Before</Radio>
-								<Radio value={4}>Gov Special</Radio>
+								<Tooltip title="Premier Service Providers Only" placement="right"><Radio value={4}>Immediately</Radio></Tooltip>
 							</Radio.Group>
 						</Row>
 					</Card>

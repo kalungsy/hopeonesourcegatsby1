@@ -97,20 +97,18 @@ const CreatePostForm = (props) => {
 
 	useEffect(() => {
 		if (loading === 'initial') {
-			
 			(async () => {
 				const geoIpResult = await getGeoIpInfo();
 				console.log('My geoIpResult', geoIpResult);
 				if (geoIpResult.latitude && geoIpResult.longitude) {
 					setMyCoordinates({ lat: geoIpResult.latitude, long: geoIpResult.longitude });
 					setUsingMyLocation(true);
-				}else{
+				} else {
 					setMyCoordinates({ lat: 38.9060434, long: -77.0954141 });
 				}
 			})();
 
 			setLoading(false);
-			
 		}
 	});
 
@@ -497,18 +495,19 @@ const CreatePostForm = (props) => {
 								</Button>
 							</Col>
 						</Row>
-						{myCoordinates.lat && myCoordinates.long && 
-						<Row>
-							<Map
-								myCoordinates={myCoordinates}
-								setCoordinates={setMyCoordinates}
-								usingMyLocation={usingMyLocation}
-								setUsingMyLocation={setUsingMyLocation}
-								parentGeoFeatureData={geoFeatureData}
-								setParentGeoFeatureData={setGeoFeatureData}
-							/>
-						</Row>
-						}
+						{myCoordinates.lat &&
+						myCoordinates.long && (
+							<Row>
+								<Map
+									myCoordinates={myCoordinates}
+									setCoordinates={setMyCoordinates}
+									usingMyLocation={usingMyLocation}
+									setUsingMyLocation={setUsingMyLocation}
+									parentGeoFeatureData={geoFeatureData}
+									setParentGeoFeatureData={setGeoFeatureData}
+								/>
+							</Row>
+						)}
 					</Card>
 				</Row>
 
@@ -657,6 +656,11 @@ function beforeUpload(file) {
 	return isJpgOrPng && isLt2M;
 }
 
-const CreatePost = Form.create({ name: 'create_post' })(CreatePostForm);
+const CreatePost = Form.create({
+	name: 'create_post',
+	onValuesChange: (props, changedValues, allValues) => {
+		console.log('form changes', changedValues);
+	}
+})(CreatePostForm);
 
 export default CreatePost;

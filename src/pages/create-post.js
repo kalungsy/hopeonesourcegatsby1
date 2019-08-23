@@ -25,6 +25,7 @@ import DateRange from '../components/form-components/date-picker';
 import Map from '../components/form-components/map';
 import { getWebLocation, getGeoFeature, getGeoIpInfo } from '../components/utils';
 import moment from 'moment';
+import MessageEditor from '../components/form-components/message-editor';
 
 const settings = {
 	messageLimit: 150
@@ -522,14 +523,34 @@ const CreatePostForm = (props) => {
 								Your message should contain the What, When, Where, Eligibility Requirements, and contact
 								information of your available service.
 							</p>
-							<TextArea
+							<MessageEditor data={{
+								start_date: '09/12/2019',
+								end_date: '10/12/2019',
+								start_time: '10:00am',
+								end_time: '4:00pm',
+								what: getFieldValue('service_title') || 'Your service',
+								repeat: {
+									frequency: 'every week',
+									week: '',
+									day: [ 'Mon', 'Wed' ]
+								},
+								where: (geoFeatureData && geoFeatureData.features.length) ? (
+									geoFeatureData.features[0].place_name
+								) : (
+									'your location address'
+								)
+							}} onChange={(textContent) => {
+								// console.log(e.target.value);
+								setMessageCharCount(textContent.length);
+							}}/>
+							{/* <TextArea
 								placeholder={`This message will be auto populated with the information you entered above.`}
 								autosize={{ minRows: 6, maxRows: 8 }}
 								onChange={(e) => {
 									console.log(e.target.value);
 									setMessageCharCount(e.target.value.length);
 								}}
-							/>
+							/> */}
 							<p className={`char-counter ${messageCharCount > settings.messageLimit ? '__full' : ''}`}>
 								Characters left: {settings.messageLimit - messageCharCount}
 							</p>

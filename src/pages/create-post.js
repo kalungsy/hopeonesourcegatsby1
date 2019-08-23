@@ -294,7 +294,7 @@ const CreatePostForm = (props) => {
 							</Row>
 						)}
 						<Row>
-							<h4>Describe your service</h4>
+							<h4>Describe your service in detail (Optional)</h4>
 							<p>This description will be posted on the our service listing page.</p>
 							<TextArea
 								autosize={{ minRows: 6, maxRows: 8 }}

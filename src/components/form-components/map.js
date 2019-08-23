@@ -20,14 +20,14 @@ const Map = (props) => {
 		height: mapHeight,
 		latitude: myCoordinates.lat || 37.7577,
 		longitude: myCoordinates.long || -122.4376,
-		zoom: 8
+		zoom: 13,
 	});
 	let [ loading, setLoading ] = useState(true);
 	let [ geoFeatureData, setGeoFeatureData ] = useState(null);
 	let [ isDragging, setIsDragging ] = useState(false);
 
 	useEffect(() => {
-		console.log("ran map effect")
+		console.log("ran map effect", viewport)
 		if (loading) {
 			async function fetchLocation() {
 				return await getWebLocation().catch((e) => {
@@ -103,10 +103,10 @@ const Map = (props) => {
 				onTransitionEnd={(e) => {
 					console.log('transition ended', e);
 				}}
-				onInteractionStateChange={(interactionState) => {
-					if (interactionState.isDragging) {
-						console.log('Dragging', interactionState);
-						setIsDragging(interactionState.isDragging);
+				onInteractionStateChange={({isDragging, isPanning, isRotating, isZooming}) => {
+					if (isDragging || isPanning || isRotating || isZooming) {
+						console.log('Moving');
+						setIsDragging(true);
 					} else {
 						setIsDragging('done');
 					}

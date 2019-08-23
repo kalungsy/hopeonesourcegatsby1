@@ -101,8 +101,8 @@ const CreatePostForm = (props) => {
 			(async () => {
 				const geoIpResult = await getGeoIpInfo();
 				console.log('My geoIpResult', geoIpResult);
-				if (geoIpResult.latitude && geoIpResult.longtitue) {
-					setMyCoordinates({ lat: geoIpResult.latitude, long: geoIpResult.longtitue });
+				if (geoIpResult.latitude && geoIpResult.longitude) {
+					setMyCoordinates({ lat: geoIpResult.latitude, long: geoIpResult.longitude });
 					setUsingMyLocation(true);
 				}else{
 					setMyCoordinates({ lat: 38.9060434, long: -77.0954141 });

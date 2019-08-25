@@ -18,6 +18,7 @@ import {
 	Row,
 	Col,
 	Icon,
+	Tooltip,
 	notification,
 	message
 } from 'antd';
@@ -136,7 +137,7 @@ const CreatePostForm = (props) => {
 							month period.
 						</p>
 						<Row>
-							<h4>What is your service?</h4>
+							<h4>What is your service in a short sentance?</h4>
 							<p>Enter a short sentence about what you are providing for this service.</p>
 							<Form.Item>
 								{getFieldDecorator('service_title', {
@@ -217,7 +218,7 @@ const CreatePostForm = (props) => {
 						{getFieldValue('service_type') === 'recurring' && (
 							<Row>
 								<Col xs={24}>
-									<h4 style={{ marginBottom: '15px' }}>
+									<h4 style={{ marginBottom: '15px', lineHeight: 4.5 }}>
 										Service repeats{' '}
 										<Select
 											size="large"
@@ -265,7 +266,9 @@ const CreatePostForm = (props) => {
 												<Option value={2}>2nd</Option>
 												<Option value={3}>3rd</Option>
 												<Option value={4}>4th</Option>
-												<Option value={5}>Last</Option>
+												<Option value={5}>
+													<Tooltip title="Only if there is a 5th week">5th</Tooltip>
+												</Option>
 											</Select>
 										)}
 										week on ...
@@ -282,8 +285,8 @@ const CreatePostForm = (props) => {
 						)}
 						{getFieldValue('service_type') === 'recurring' && (
 							<Row>
-								<Col xs={24} md={8}>
-									<h4>Service's last day is on</h4>
+								<Col xs={24} md={24}>
+									<h4>Service ends on (Leave blank of no end date)</h4>
 									<DatePicker
 										format={dateFormat}
 										onChange={(date, dateString) => {
@@ -293,121 +296,73 @@ const CreatePostForm = (props) => {
 								</Col>
 							</Row>
 						)}
-						<Row>
-							<h4>Describe your service</h4>
-							<p>This description will be posted on the our service listing page.</p>
-							<TextArea
-								autosize={{ minRows: 6, maxRows: 8 }}
-								onChange={(e) => {
-									console.log(e.target.value);
-									setMessageCharCount(e.target.value.length);
-								}}
-							/>
-						</Row>
-
-						<Row>
-							<h4>Upload Flyer Image (Optional)</h4>
-							<p>
-								This image will be displayed on your service post. You can upload an image such as flyer
-								about your service / event.
-							</p>
-							<Upload
-								name="flyer_upload"
-								listType="picture-card"
-								className="avatar-uploader"
-								showUploadList={false}
-								action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-								beforeUpload={beforeUpload}
-								onChange={(info) => {
-									if (info.file.status === 'uploading') {
-										setLoading('flyer_upload');
-										return;
-									}
-									if (info.file.status === 'done') {
-										// Get this url from response in real world.
-										getBase64(info.file.originFileObj, (imageUrl) => {
-											setImageUrl(imageUrl);
-											setLoading(false);
-										});
-									}
-								}}
-							>
-								{imageUrl ? (
-									<img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
-								) : (
-									<div>
-										<Icon type={loading === 'flyer_upload' ? 'loading' : 'plus'} />
-										<div className="ant-upload-text">Upload</div>
-									</div>
-								)}
-							</Upload>
-						</Row>
-
-						<Row>
-							<h4>Exclude or Include Certain Dates (Optional)</h4>
-							<p>
-								Select dates you want to include or exclude, such as Hoildays that you might be closed
-								or open.
-							</p>
-							<div className="flex __column __gap">
-								{excIncDates.map((item, i) => (
-									<div key={i} className="flex __row __middle __gap">
-										<Select value="exclude" size="large" style={{ width: '160px', height: '60px' }}>
-											<Option value="exclude">Exclude</Option>
-											<Option value="include">Include</Option>
-										</Select>
-										<DatePicker
-											data-index={i}
-											value={item.date}
-											onChange={(val, valString) => {
-												console.log('excIncDate', val, valString);
-												setExcIncDates([
-													...excIncDates.slice(0, i),
-													{ exclude: false, date: val },
-													...excIncDates.slice(i + 1)
-												]);
-											}}
-										/>
-										{i == excIncDates.length - 1 ? (
-											<Button
-												size="large"
-												type="link"
-												onClick={() => {
-													setExcIncDates([ ...excIncDates, { exclude: false, date: null } ]);
-												}}
-											>
-												<Icon type="plus" /> add more
-											</Button>
-										) : (
-											<Button
-												size="large"
-												type="link"
-												onClick={(e) => {
+						{getFieldValue('service_type') === 'recurring' && (
+							<Row>
+								<h4>Exclude or Include Certain Dates (Optional)</h4>
+								<p>
+									Select dates you want to include or exclude, such as Hoildays that you might be closed
+									or open.
+								</p>
+								<div className="flex __column __gap">
+									{excIncDates.map((item, i) => (
+										<div key={i} className="flex __row __middle __gap">
+											<Select value="exclude" size="large" style={{ width: '160px', height: '60px' }}>
+												<Option value="exclude">Exclude</Option>
+												<Option value="include">Include</Option>
+											</Select>
+											<DatePicker
+												data-index={i}
+												value={item.date}
+												onChange={(val, valString) => {
+													console.log('excIncDate', val, valString);
 													setExcIncDates([
 														...excIncDates.slice(0, i),
+														{ exclude: false, date: val },
 														...excIncDates.slice(i + 1)
 													]);
 												}}
-											>
-												<Icon type="minus" /> remove
-											</Button>
-										)}
-										{i == excIncDates.length - 1 &&
-										item.date !== null && (
-											<Button
-												size="large"
-												type="link"
-												onClick={() => {
-													console.log('clear to be');
-												}}
-											>
-												<Icon type="delete" /> clear
-											</Button>
-										)}
-									</div>
-								))}
-							</div>
-						</Row>
+											/>
+											{i == excIncDates.length - 1 ? (
+												<Button
+													size="large"
+													type="link"
+													onClick={() => {
+														setExcIncDates([ ...excIncDates, { exclude: false, date: null } ]);
+													}}
+												>
+													<Icon type="plus" /> add more
+												</Button>
+											) : (
+												<Button
+													size="large"
+													type="link"
+													onClick={(e) => {
+														setExcIncDates([
+															...excIncDates.slice(0, i),
+															...excIncDates.slice(i + 1)
+														]);
+													}}
+												>
+													<Icon type="minus" /> remove
+												</Button>
+											)}
+											{i == excIncDates.length - 1 &&
+											item.date !== null && (
+												<Button
+													size="large"
+													type="link"
+													onClick={() => {
+														console.log('clear to be');
+													}}
+												>
+													<Icon type="delete" /> clear
+												</Button>
+											)}
+										</div>
+									))}
+								</div>
+							</Row>
+						)}
 					</Card>
 				</Row>
 
@@ -558,8 +513,8 @@ const CreatePostForm = (props) => {
 						<Row>
 							<h4>Select the time to send the message</h4>
 							<p>
-								When do you want to send the messages? We recommand sending your message 3 days before
-								the service date. You can send messages for recurring services.
+								When do you want to send the messages? We recommand sending your message 2 days before
+								the service's start date.
 							</p>
 							<Radio.Group
 								className="__flex"
@@ -572,7 +527,7 @@ const CreatePostForm = (props) => {
 								<Radio value={1}>2 Days Before</Radio>
 								<Radio value={2}>24 Hours Before</Radio>
 								<Radio value={3}>2 Hours Before</Radio>
-								<Radio value={4}>Gov Special</Radio>
+								<Tooltip title="Premier Service Providers Only" placement="right"><Radio value={4}>Immediately</Radio></Tooltip>
 							</Radio.Group>
 						</Row>
 					</Card>
@@ -618,6 +573,63 @@ const CreatePostForm = (props) => {
 									console.log('current values', values);
 								}}
 							/>
+						</Row>
+					</Card>
+				</Row>
+
+				<Row>
+					<Card>
+						<Row>
+							<h3 className="__card-title">
+								<Icon type="carry-out" /> Add Service Details
+							</h3>
+							<h4>Describe your service in detail (Optional)</h4>
+							<p>This description will be posted on the our service listing page.</p>
+							<TextArea
+								autosize={{ minRows: 6, maxRows: 8 }}
+								onChange={(e) => {
+									console.log(e.target.value);
+									setMessageCharCount(e.target.value.length);
+								}}
+							/>
+						</Row>
+
+						<Row>
+							<h4>Upload Flyer Image (Optional)</h4>
+							<p>
+								This image will be displayed on your service post. You can upload an image such as flyer
+								about your service / event.
+							</p>
+							<Upload
+								name="flyer_upload"
+								listType="picture-card"
+								className="avatar-uploader"
+								showUploadList={false}
+								action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+								beforeUpload={beforeUpload}
+								onChange={(info) => {
+									if (info.file.status === 'uploading') {
+										setLoading('flyer_upload');
+										return;
+									}
+									if (info.file.status === 'done') {
+										// Get this url from response in real world.
+										getBase64(info.file.originFileObj, (imageUrl) => {
+											setImageUrl(imageUrl);
+											setLoading(false);
+										});
+									}
+								}}
+							>
+								{imageUrl ? (
+									<img src={imageUrl} alt="avatar" style={{ width: '100%' }} />
+								) : (
+									<div>
+										<Icon type={loading === 'flyer_upload' ? 'loading' : 'plus'} />
+										<div className="ant-upload-text">Upload</div>
+									</div>
+								)}
+							</Upload>
 						</Row>
 					</Card>
 				</Row>
